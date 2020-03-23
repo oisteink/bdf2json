@@ -1,6 +1,6 @@
 'use strict';
 
-const jf = require('./json-font.js');
+const jf = require('json-font');
 const fs = require('fs');
 
 const BDFtokens = { //BDF fields we use - the rest we ignore
@@ -20,6 +20,11 @@ const BDFtokens = { //BDF fields we use - the rest we ignore
  * Custom error to catch unsupported encodings
  */
 class bdfUnsupportedEncoding extends Error {
+    constructor(glyphName, issue, message) {
+        super(message);
+        this.glyphName = glyphName;
+        this.issue = issue;
+    }
 }
 
 /**
@@ -57,7 +62,7 @@ class bdfFontParser extends jf.jsonFont {
                         line = lines.shift(); 
                         if (line.includes(BDFtokens.charEncoding)) {
                             char.encoding = Number(line.substring(BDFtokens.charEncoding.length, line.length));
-                            if (char.encoding < 0) throw new bdfUnsupportedEncoding('We don\'t support anything but standard adobe endcoding');
+                            if (char.encoding < 0) throw new bdfUnsupportedEncoding(char.glyphName, line.substring(BDFtokens.charEncoding.length, line.length), 'Only standard Adobe encodings supported.');
                         }
                         if (line.includes(BDFtokens.dWidth)) { [char.nextChar] = line.substring(BDFtokens.dWidth.length, line.length).split(' ').map(Number) }
                         if (line.includes(BDFtokens.bbx)) { [char.width, char.height, char.xOffset, char.yOffset] = line.substring(BDFtokens.bbx.length, line.length).split(' ').map(Number) }
@@ -80,7 +85,7 @@ class bdfFontParser extends jf.jsonFont {
                 }
                 catch (error) {
                     if (error instanceof bdfUnsupportedEncoding) {
-                        console.warn(char.glyphName, line.substring(BDFtokens.charEncoding.length, line.length), 'Only standard Adobe encodings supported.');
+                        console.warn(error.glyphName, error.issue, error.message);
                     } else {
                         throw error; //Re-throw other errors
                     }

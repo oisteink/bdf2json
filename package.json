@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/oisteink/bdf2json/issues"
   },
-  "homepage": "https://github.com/oisteink/bdf2json#readme"
+  "homepage": "https://github.com/oisteink/bdf2json#readme",
+  "dependencies": {
+    "json-font": "file:../../packages/json-font"
+  }
 }
