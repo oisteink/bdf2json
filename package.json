@@ -1,0 +1,23 @@
+{
+  "name": "bdf2json",
+  "version": "1.0.0",
+  "description": "Converts BDF fonts to json-font format",
+  "main": "bdf2json.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oisteink/bdf2json.git"
+  },
+  "keywords": [
+    "bdf",
+    "json-font"
+  ],
+  "author": "Øistein Kjos",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/oisteink/bdf2json/issues"
+  },
+  "homepage": "https://github.com/oisteink/bdf2json#readme"
+}
