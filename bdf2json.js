@@ -70,9 +70,9 @@ class bdfFontParser extends jf.jsonFont {
                             line = lines.shift(); //get data -if any. If no data (empty glyph) we will move on.
                             while (!line.includes(BDFtokens.endChar)) {
                                 let hex = Number('0x' + line);
-                                let bitWidth = (char.width < 9) ? 8 : 16;
+                                let bitWidth = (char.width < 9) ? 7 : 15;
                                 let bitLine = [];
-                                for (let bit = bitWidth; bit >= (bitWidth - char.width); bit--) {
+                                for (let bit = bitWidth; bit > (bitWidth - char.width); bit--) {
                                     bitLine.push((hex >> bit) & 0x01);
                                 }
                                 char.glyph.push(bitLine);
