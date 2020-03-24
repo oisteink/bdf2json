@@ -21,6 +21,6 @@
   },
   "homepage": "https://github.com/oisteink/bdf2json#readme",
   "dependencies": {
-    "json-font": "file:../../packages/json-font"
+    "json-font": "^1.0.0"
   }
 }
