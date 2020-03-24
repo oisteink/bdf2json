@@ -73,7 +73,7 @@ class bdfFontParser extends jf.jsonFont {
                                 let maxShift = Math.ceil(char.width / 8) * 8 - 1; //Each byte is 8 bits.
                                 let bitLine = [];
                                 for (let bit = maxShift; bit > (maxShift - char.width); bit--) {
-                                    bitLine.push((hex >> (bit)) & 0x01);
+                                    bitLine.push((hex >> bit) & 0x01);
                                 }
                                 char.glyph.push(bitLine);
                                 line = lines.shift();
