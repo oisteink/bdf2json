@@ -59,7 +59,7 @@ class bdfFontParser extends jf.jsonFont {
                     let char = new jf.jfChar();
                     char.glyphName = line.substring(BDFtokens.startChar.length, line.length);
                     do {
-                        line = lines.shift(); 
+                        line = lines.shift();
                         if (line.includes(BDFtokens.charEncoding)) {
                             char.encoding = Number(line.substring(BDFtokens.charEncoding.length, line.length));
                             if (char.encoding < 0) throw new bdfUnsupportedEncoding(char.glyphName, line.substring(BDFtokens.charEncoding.length, line.length), 'Only standard Adobe encodings supported.');
@@ -81,7 +81,7 @@ class bdfFontParser extends jf.jsonFont {
                         }
                     } while (!line.includes(BDFtokens.endChar))
                     this.chars.push(char); //Add the character
-                    console.log('Done ', this.chars.length, ' chars of ', this.charCount, ' : ', Number((this.chars.length / this.charCount)*100).toFixed(2), '%');
+                    console.log('Done ', this.chars.length, ' chars of ', this.charCount, ' : ', Number((this.chars.length / this.charCount) * 100).toFixed(2), '%');
                 }
                 catch (error) {
                     if (error instanceof bdfUnsupportedEncoding) {
@@ -95,22 +95,43 @@ class bdfFontParser extends jf.jsonFont {
     }
 }
 
-console.time('Time spent converting');
-let outfile, infile;
-{
-    let myArgs = process.argv.slice(2);
-    if (myArgs.length = 4) {
-        infile = myArgs[myArgs.indexOf('-i') + 1];
-        outfile = myArgs[myArgs.indexOf('-o') + 1];
-    }
-    if ((!infile) | (!outfile)) {
-        console.log('usage: -o outfile -i infile')
-        process.exit(-1);
-    }
+
+function usage() {
+    console.log('usage: -o outfile -i infile')
+    process.exit(-1);
 }
 
-console.log('Converting ', infile, ' to ', outfile );
-let font = new bdfFontParser();
-font.parseFont(infile);
-fs.writeFileSync(outfile, JSON.stringify(font));
-console.timeEnd('Time spent converting');
+
+try {
+    console.time('Conversion time');
+
+    const arg = require('arg');
+
+    let args = arg({
+        '--outfile': String,
+        '--infile': String,
+        '--help': Boolean,
+        '-o': '--outfile',
+        '-i': '--infile',
+        '-h': '--help'
+    });
+
+    if (args['--help']) {
+        usage();
+    }
+
+    let infile = args['--infile'];
+    let outfile = args['--outfile'];
+
+    if ((!infile) | (!outfile)) {
+        usage();
+    }
+
+    console.log('Converting ', infile, ' to ', outfile);
+    let font = new bdfFontParser();
+    font.parseFont(infile);
+    fs.writeFileSync(outfile, JSON.stringify(font));
+    console.timeEnd('Conversion time');
+} catch (error) {
+    console.log('Error!', error.message);
+}
